@@ -20,11 +20,14 @@ function displayLibrary () {
 function displayBook (book) {
     let card = createBookCard (); 
     updateValues (book, card);
+    card.dataset.i = library.indexOf(book);
 }
 
 function createBookCard () {
     const card = document.createElement('div');
     card.className = 'book';
+    card.classList.add('new');
+    setTimeout(() => card.classList.remove('new'), 100);
     createContents(card);
     return card;
 }
@@ -35,11 +38,21 @@ function createContents (card) {
     const pages = document.createElement('p');
     const rating = document.createElement('p');
     const read = document.createElement('p');
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.textContent = 'Edit';
+    edit.addEventListener('click', () => displayEdit(card.dataset.i));
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'x';
+    remove.addEventListener('click', () => removeBook(card.dataset.i));
     card.appendChild(title);
     card.appendChild(author);
     card.appendChild(pages);
     card.appendChild(rating);
     card.appendChild(read);
+    card.appendChild(edit);
+    card.appendChild(remove);
     content.appendChild(card);
 }
 
@@ -51,18 +64,74 @@ function updateValues (book, card) {
     card.childNodes[4].textContent = book.read;
 }
 
+const form = document.getElementById('form')
 const background = document.getElementById('background');
+background.addEventListener('click', hideForm);
 const addButton = document.getElementById('new-book');
 addButton.addEventListener('click', displayForm);
+const submit = document.querySelector('#submit');
+submit.addEventListener('click', post);
+const edit = document.querySelector('#edit');
+const title = document.getElementById('title');
+const author = document.getElementById('author');
+const pages = document.getElementById('pages');
+const rating = document.getElementById('rating');
+const read = document.getElementById('read');
 
 
 
 function displayForm () {
     background.classList.add('active');
+    form.classList.add('active');
+    title.value = '';
+    author.value = ''; 
+    pages.value = '';
+    rating.value = '--';
+    read.value = 'not_read';
 }
 
-let Harry = new Book ('Harry', 'J.K.', 152, 8, 'nel');
-let x = new Book ('s', 's', 2, 3, 's');
+function hideForm() {
+    background.classList.remove('active');
+    form.classList.remove('active'); 
+}
+
+function post() {
+    let newBook = new Book (title.value, author.value, pages.value, rating.value, read.value);
+    newBook.addToLibrary();
+    displayBook(newBook);
+    hideForm();
+}
+
+function removeBook (index) {
+    library.splice(index, 1);
+    let card = document.querySelector(`div[data-i="${index}"]`);
+    card.classList.add('delete');
+    setTimeout(() => {
+        card.remove();
+        updateCardsIndex();
+    }, 100);
+}
+
+function updateCardsIndex () {
+    let array = Array.from(document.getElementsByClassName('book'));
+    for (let i=0; i<array.length; i++){
+        array[i].dataset.i = i;
+    }
+}
+
+function displayEdit (index) {
+    displayForm();
+    submit.classList.remove('active');
+    edit.classList.add('active');
+    title.value = library[index].title;
+    author.value = library[index].author;
+    pages.value = library[index].pages;
+    rating.value = library[index].rating;
+    read.value = library[index].read
+}
+
+let Harry = new Book ('Harry', 'J.K.', 152, 8, 'not_read');
+let x = new Book ('s', 's', 2, 3, 'read');
 Harry.addToLibrary();
 x.addToLibrary();
 
