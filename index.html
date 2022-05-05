@@ -29,17 +29,17 @@
    <form method="post" id="form">
     <div>
         <p class="instructions">*Please fill out this field</p>
-        <input type="text" id="title" minlength="1" class="required" required>
+        <input type="text" id="title" minlength="1" maxlength="70" class="required" required>
         <label for="title">Title*</label>
     </div>
     <div>
         <p class="instructions">*Please fill out this field</p>
-        <input type="text" id="author" minlength="1" class="required" required>
+        <input type="text" id="author" minlength="1" maxlength="25" class="required" required>
         <label for="author">Author*</label>
     </div>
     <div>
         <p class="instructions">*Please fill out this field</p>
-        <input type="number" id="pages" min="1" class="required" required>
+        <input type="number" id="pages" min="1" max="999" class="required" required>
         <label for="pages">Number of Pages*</label>
     </div>
     <div>

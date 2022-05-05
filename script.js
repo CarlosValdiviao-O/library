@@ -298,8 +298,13 @@ function checkInputValidity (i) {
     else instructions[i].classList.add('active');
 }
 
-let Harry = new Book ('Harry', 'J.K.', 152, 8, 'not_read');
-let x = new Book ('s', 's', 2, 3, 'read');
+//prevents form resubmission on refresh
+if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+}
+
+let Harry = new Book ('Harry Potter and the Prisoner of Azkabam', 'J.K. Rowlings', 317, '--', 'reading');
+let x = new Book ('Why We Sleep', 'Matthew Walker', 368, 9, 'read');
 Harry.addToLibrary();
 x.addToLibrary();
 
